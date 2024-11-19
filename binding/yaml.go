@@ -6,7 +6,6 @@ package binding
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 
 	"github.com/zhiyunliu/xbinding"
@@ -25,12 +24,12 @@ func (yamlBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	realData, ok := dataObj.(io.Reader)
-	if !ok {
-		return fmt.Errorf("yaml binding requires an io.Reader object")
+	readData, err := transferIoReader(dataObj)
+	if err != nil {
+		return err
 	}
 
-	return decodeYAML(realData, obj)
+	return decodeYAML(readData, obj)
 }
 
 func (yamlBinding) BindBody(body []byte, obj interface{}) error {

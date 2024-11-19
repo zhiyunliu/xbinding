@@ -1,12 +1,11 @@
 package xbinding
 
-import "github.com/zhiyunliu/glue/context"
-
 type Option func(o *Options)
 
 type Options struct {
-	method  string
-	headers context.Header
+	Proto       string
+	Method      string
+	ContextType string
 }
 
 func NewOptions(opts ...Option) *Options {
@@ -17,14 +16,20 @@ func NewOptions(opts ...Option) *Options {
 	return o
 }
 
-func WithHeaders(headers context.Header) Option {
+func WithContextType(contextType string) Option {
 	return func(o *Options) {
-		o.headers = headers
+		o.ContextType = contextType
 	}
 }
 
 func WithMethod(method string) Option {
 	return func(o *Options) {
-		o.method = method
+		o.Method = method
+	}
+}
+
+func WithProto(proto string) Option {
+	return func(o *Options) {
+		o.Proto = proto
 	}
 }

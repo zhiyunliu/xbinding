@@ -4,15 +4,26 @@
 
 package binding
 
+import "github.com/zhiyunliu/xbinding"
+
 type uriBinding struct{}
 
 func (uriBinding) Name() string {
 	return "uri"
 }
 
-func (uriBinding) BindUri(m map[string][]string, obj interface{}) error {
+func (uriBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 
-	if err := mapURI(obj, m); err != nil {
+	dataObj, err := reader.ReadObject()
+	if err != nil {
+		return err
+	}
+	realData, err := transferMapArrayData(dataObj)
+	if err != nil {
+		return err
+	}
+
+	if err := mapURI(obj, realData); err != nil {
 		return err
 	}
 	return validate(obj)

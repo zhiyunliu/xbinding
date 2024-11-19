@@ -6,7 +6,6 @@ package binding
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 
 	"encoding/json"
@@ -36,9 +35,10 @@ func (jsonBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	readData, ok := dataObj.(io.Reader)
-	if !ok {
-		return fmt.Errorf("json binding requires an io.Reader object")
+
+	readData, err := transferIoReader(dataObj)
+	if err != nil {
+		return err
 	}
 
 	return decodeJSON(readData, obj)

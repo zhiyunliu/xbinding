@@ -6,7 +6,6 @@ package binding
 
 import (
 	"errors"
-	"fmt"
 	"io"
 
 	"github.com/zhiyunliu/xbinding"
@@ -25,9 +24,9 @@ func (b protobufBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	readData, ok := dataObj.(io.Reader)
-	if !ok {
-		return fmt.Errorf("obj is not io.Reader")
+	readData, err := transferIoReader(dataObj)
+	if err != nil {
+		return err
 	}
 	buf, err := io.ReadAll(readData)
 	if err != nil {

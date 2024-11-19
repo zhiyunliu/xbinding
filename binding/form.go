@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
-	"net/url"
 
 	"github.com/zhiyunliu/xbinding"
 )
@@ -49,11 +48,11 @@ func (formPostBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	vs, ok := dataObj.(url.Values)
-	if !ok {
-		return fmt.Errorf("form-urlencoded binding requires url.Values object")
+	realData, err := transferMapArrayData(dataObj)
+	if err != nil {
+		return err
 	}
-	if err := mapForm(obj, vs); err != nil {
+	if err := mapForm(obj, realData); err != nil {
 		return err
 	}
 	return validate(obj)

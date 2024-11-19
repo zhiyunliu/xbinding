@@ -7,7 +7,6 @@ package binding
 import (
 	"bytes"
 	"encoding/xml"
-	"fmt"
 	"io"
 
 	"github.com/zhiyunliu/xbinding"
@@ -24,12 +23,12 @@ func (xmlBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	realData, ok := dataObj.(io.Reader)
-	if !ok {
-		return fmt.Errorf("xml binding requires an io.Reader object")
+	readData, err := transferIoReader(dataObj)
+	if err != nil {
+		return err
 	}
 
-	return decodeXML(realData, obj)
+	return decodeXML(readData, obj)
 }
 
 func (xmlBinding) BindBody(body []byte, obj interface{}) error {

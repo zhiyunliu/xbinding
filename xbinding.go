@@ -7,12 +7,12 @@ import (
 // 解析器
 type Resolver interface {
 	Name() string
-	Resolve(opts ...Option) (Codec, error)
+	Resolve(opts *Options) (Codec, error)
 }
 
 type Codec interface {
 	Marshal(v interface{}) ([]byte, error)
-	Unmarshal(data []byte, v interface{}) error
+	Unmarshal(reader Reader, v interface{}) error
 }
 
 var resolvers = make(map[string]Resolver)
@@ -26,10 +26,16 @@ func Register(resolver Resolver) {
 }
 
 // NewBinding 根据适配器名称及参数返回配置处理器
-func NewBinding(proto string, opts ...Option) (Codec, error) {
+func NewBinding(opts ...Option) (Codec, error) {
+	botps := NewOptions(opts...)
+	//默认的绑定适配器
+	proto := "binding"
+	if botps.Proto != "" {
+		proto = botps.Proto
+	}
 	resolver, ok := resolvers[proto]
 	if !ok {
 		return nil, fmt.Errorf("xbinding: 未知的协议类型:%s", proto)
 	}
-	return resolver.Resolve(opts...)
+	return resolver.Resolve(botps)
 }
