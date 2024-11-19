@@ -26,7 +26,7 @@ func Register(resolver Resolver) {
 }
 
 // NewBinding 根据适配器名称及参数返回配置处理器
-func NewBinding(opts ...Option) (Codec, error) {
+func New(opts ...Option) (Codec, error) {
 	botps := NewOptions(opts...)
 	//默认的绑定适配器
 	proto := "binding"
