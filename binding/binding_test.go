@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/zhiyunliu/golibs/xtypes"
 	"github.com/zhiyunliu/xbinding"
 	"github.com/zhiyunliu/xbinding/testdata/protoexample"
 	"google.golang.org/protobuf/proto"
@@ -1423,4 +1424,61 @@ func newReader(val any) xbinding.Reader {
 	return &DefaultReader{
 		Data: val,
 	}
+}
+
+func Test_transferMapArrayData(t *testing.T) {
+	// url.Values
+	uv := url.Values{}
+	uv.Add("key1", "value1")
+	source, err := transferMapArrayData(uv)
+	assert.NoError(t, err)
+	assert.Equal(t, map[string][]string(uv), source)
+
+	// map[string][]string
+	mss := map[string][]string{"key1": {"value1"}}
+	source, err = transferMapArrayData(mss)
+	assert.NoError(t, err)
+	assert.Equal(t, mss, source)
+
+	// http.Header
+	h := http.Header{}
+	h.Add("key1", "value1")
+	source, err = transferMapArrayData(h)
+	assert.NoError(t, err)
+	assert.Equal(t, map[string][]string(h), source)
+
+	// map[string]string
+	ms := map[string]string{"key1": "value1"}
+	source, err = transferMapArrayData(ms)
+	assert.NoError(t, err)
+	assert.Equal(t, map[string][]string{"key1": {"value1"}}, source)
+
+	// xtypes.SMap
+	// Note: Replace SMap with the correct type definition from your xtypes package
+	sm := xtypes.SMap{
+		"key1": "value1",
+	}
+	source, err = transferMapArrayData(sm)
+	assert.NoError(t, err)
+	assert.Equal(t, map[string][]string{"key1": {"value1"}}, source)
+
+	// map[string]any
+	ma := map[string]any{"key1": "value1"}
+	source, err = transferMapArrayData(ma)
+	assert.NoError(t, err)
+	assert.Equal(t, map[string][]string{"key1": {"value1"}}, source)
+
+	// xtypes.XMap
+	// Note: Replace XMap with the correct type definition from your xtypes package
+	xm := xtypes.XMap{
+		"key1": "value1",
+	}
+	source, err = transferMapArrayData(xm)
+	assert.NoError(t, err)
+	assert.Equal(t, map[string][]string{"key1": {"value1"}}, source)
+
+	// Invalid type
+	source, err = transferMapArrayData("invalid type")
+	assert.Error(t, err)
+	assert.Nil(t, source)
 }
