@@ -6,7 +6,7 @@ package binding
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"testing"
@@ -26,7 +26,7 @@ func TestFormMultipartBindingBindOneFile(t *testing.T) {
 	file := testFile{"file", "file1", []byte("hello")}
 
 	req := createRequestMultipartFiles(t, file)
-	err := FormMultipart.Bind(req, &s)
+	err := FormMultipart.Bind(toReader(req), &s)
 	assert.NoError(t, err)
 
 	assertMultipartFileHeader(t, &s.FileValue, file)
@@ -52,7 +52,7 @@ func TestFormMultipartBindingBindTwoFiles(t *testing.T) {
 	}
 
 	req := createRequestMultipartFiles(t, files...)
-	err := FormMultipart.Bind(req, &s)
+	err := FormMultipart.Bind(toReader(req), &s)
 	assert.NoError(t, err)
 
 	assert.Len(t, s.SliceValues, len(files))
@@ -89,7 +89,7 @@ func TestFormMultipartBindingBindError(t *testing.T) {
 		}{}},
 	} {
 		req := createRequestMultipartFiles(t, files...)
-		err := FormMultipart.Bind(req, tt.s)
+		err := FormMultipart.Bind(toReader(req), tt.s)
 		assert.Error(t, err)
 	}
 }
@@ -100,7 +100,7 @@ type testFile struct {
 	Content   []byte
 }
 
-func createRequestMultipartFiles(t *testing.T, files ...testFile) *multipart.Form {
+func createRequestMultipartFiles(t *testing.T, files ...testFile) *http.Request {
 	var body bytes.Buffer
 
 	mw := multipart.NewWriter(&body)
@@ -129,7 +129,7 @@ func assertMultipartFileHeader(t *testing.T, fh *multipart.FileHeader, file test
 	fl, err := fh.Open()
 	assert.NoError(t, err)
 
-	body, err := ioutil.ReadAll(fl)
+	body, err := io.ReadAll(fl)
 	assert.NoError(t, err)
 	assert.Equal(t, string(file.Content), string(body))
 

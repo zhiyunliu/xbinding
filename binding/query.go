@@ -5,9 +5,6 @@
 package binding
 
 import (
-	"fmt"
-	"net/url"
-
 	"github.com/zhiyunliu/xbinding"
 )
 
@@ -22,11 +19,10 @@ func (queryBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	realData, ok := dataObj.(url.Values)
-	if !ok {
-		return fmt.Errorf("query binding requires an url.Values object")
+	realData, err := transferMapArrayData(dataObj)
+	if err != nil {
+		return err
 	}
-
 	if err := mapForm(obj, realData); err != nil {
 		return err
 	}

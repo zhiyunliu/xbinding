@@ -6,15 +6,14 @@ package binding
 
 import (
 	"errors"
-	"io"
 	"mime/multipart"
 	"reflect"
 )
 
 type multipartRequest multipart.Form
-type multipartReqInfo struct {
+type MultipartReqestInfo struct {
 	Boundary string
-	Body     io.Reader
+	Body     any
 }
 
 var _ setter = (*multipartRequest)(nil)

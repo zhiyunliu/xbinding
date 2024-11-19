@@ -1,7 +1,6 @@
 package binding
 
 import (
-	"fmt"
 	"net/textproto"
 	"reflect"
 
@@ -19,12 +18,13 @@ func (headerBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	vs, ok := dataObj.(map[string][]string)
-	if !ok {
-		return fmt.Errorf("header binding requires map[string][]string")
+
+	sourceData, err := transferMapArrayData(dataObj)
+	if err != nil {
+		return err
 	}
 
-	if err := mapHeader(obj, vs); err != nil {
+	if err := mapHeader(obj, sourceData); err != nil {
 		return err
 	}
 

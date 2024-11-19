@@ -5,8 +5,11 @@
 package binding
 
 import (
+	"fmt"
 	"net/http"
+	"net/url"
 
+	"github.com/zhiyunliu/golibs/xtypes"
 	"github.com/zhiyunliu/xbinding"
 )
 
@@ -31,20 +34,6 @@ const (
 type Binding interface {
 	Name() string
 	Bind(xbinding.Reader, interface{}) error
-}
-
-// BindingBody adds BindBody method to Binding. BindBody is similar with Bind,
-// but it reads the body from supplied bytes instead of req.Body.
-type BindingBody interface {
-	Binding
-	BindBody([]byte, interface{}) error
-}
-
-// BindingUri adds BindUri method to Binding. BindUri is similar with Bind,
-// but it reads the Params.
-type BindingUri interface {
-	Name() string
-	BindUri(map[string][]string, interface{}) error
 }
 
 // StructValidator is the minimal interface which needs to be implemented in
@@ -113,4 +102,39 @@ func validate(obj interface{}) error {
 		return nil
 	}
 	return Validator.ValidateStruct(obj)
+}
+
+func transferMapArrayData(dataObj any) (sourceData map[string][]string, err error) {
+
+	switch tmp := dataObj.(type) {
+	case url.Values:
+		sourceData = tmp
+	case map[string][]string:
+		sourceData = tmp
+	case http.Header:
+		sourceData = tmp
+	case map[string]string:
+		sourceData = map[string][]string{}
+		for k, v := range tmp {
+			sourceData[k] = []string{v}
+		}
+	case xtypes.SMap:
+		sourceData = map[string][]string{}
+		for k, v := range tmp {
+			sourceData[k] = []string{v}
+		}
+	case map[string]any:
+		sourceData = map[string][]string{}
+		for k, v := range tmp {
+			sourceData[k] = []string{fmt.Sprint(v)}
+		}
+	case xtypes.XMap:
+		sourceData = map[string][]string{}
+		for k, v := range tmp {
+			sourceData[k] = []string{fmt.Sprint(v)}
+		}
+	default:
+		err = fmt.Errorf("binding datatype error[%T]", dataObj)
+	}
+	return
 }

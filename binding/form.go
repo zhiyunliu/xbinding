@@ -6,6 +6,7 @@ package binding
 
 import (
 	"fmt"
+	"io"
 	"mime/multipart"
 	"net/url"
 
@@ -17,7 +18,6 @@ const defaultMemory = 32 << 20
 type formBinding struct{}
 type formPostBinding struct{}
 type formMultipartBinding struct {
-	params map[string]string
 }
 
 func (formBinding) Name() string {
@@ -29,12 +29,12 @@ func (formBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	vs, ok := dataObj.(url.Values)
-	if !ok {
-		return fmt.Errorf("form-urlencoded binding requires url.Values object")
+	realData, err := transferMapArrayData(dataObj)
+	if err != nil {
+		return err
 	}
 
-	if err := mapForm(obj, vs); err != nil {
+	if err := mapForm(obj, realData); err != nil {
 		return err
 	}
 	return validate(obj)
@@ -69,17 +69,24 @@ func (b formMultipartBinding) Bind(reader xbinding.Reader, obj interface{}) erro
 	if err != nil {
 		return err
 	}
-	reqInfo, ok := dataObj.(*multipartReqInfo)
+	reqInfo, ok := dataObj.(*MultipartReqestInfo)
 	if !ok {
-		return fmt.Errorf("multipart/form-data binding requires *multipartReqInfo object")
-
+		return fmt.Errorf("multipart/form-data binding requires *MultipartReqestInfo object")
 	}
 
-	multiPartReader := multipart.NewReader(reqInfo.Body, reqInfo.Boundary)
+	var multiForm *multipart.Form
 
-	multiForm, err := multiPartReader.ReadForm(defaultMemory)
-	if err != nil {
-		return err
+	switch tmp := reqInfo.Body.(type) {
+	case io.Reader:
+		multiPartReader := multipart.NewReader(tmp, reqInfo.Boundary)
+		multiForm, err = multiPartReader.ReadForm(defaultMemory)
+		if err != nil {
+			return err
+		}
+	case *multipart.Form:
+		multiForm = tmp
+	default:
+		return fmt.Errorf("multipart/form-data binding body type error[%T]", reqInfo.Body)
 	}
 
 	if err := mappingByPtr(obj, (*multipartRequest)(multiForm), "form"); err != nil {
