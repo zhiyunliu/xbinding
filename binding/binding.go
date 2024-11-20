@@ -83,7 +83,9 @@ func Default(method, contentType string) Binding {
 		return YAML
 	case MIMEMultipartPOSTForm:
 		return FormMultipart
-	default: // case MIMEPOSTForm:
+	case MIMEPOSTForm:
+		return Form
+	default:
 		return nil
 	}
 }
