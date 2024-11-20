@@ -11,10 +11,6 @@ import (
 )
 
 type multipartRequest multipart.Form
-type MultipartReqestInfo struct {
-	Boundary string
-	Body     any
-}
 
 var _ setter = (*multipartRequest)(nil)
 

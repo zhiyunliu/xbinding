@@ -4,6 +4,10 @@ import (
 	"fmt"
 )
 
+var ErrUnsupportedContentType = fmt.Errorf("xbinding: 不支持的Content-Type")
+
+const DefaultProto = "binding"
+
 // 解析器
 type Resolver interface {
 	Name() string
@@ -11,8 +15,9 @@ type Resolver interface {
 }
 
 type Codec interface {
+	ContentType() string
 	Marshal(v interface{}) ([]byte, error)
-	Unmarshal(reader Reader, v interface{}) error
+	Bind(reader Reader, v interface{}) error
 }
 
 var resolvers = make(map[string]Resolver)
@@ -25,17 +30,16 @@ func Register(resolver Resolver) {
 	resolvers[proto] = resolver
 }
 
-// NewBinding 根据适配器名称及参数返回配置处理器
-func New(opts ...Option) (Codec, error) {
+// GetCodec 根据适配器名称及参数返回配置处理器
+func GetCodec(opts ...Option) (Codec, error) {
 	botps := NewOptions(opts...)
 	//默认的绑定适配器
-	proto := "binding"
-	if botps.Proto != "" {
-		proto = botps.Proto
+	if botps.Proto == "" {
+		botps.Proto = DefaultProto
 	}
-	resolver, ok := resolvers[proto]
+	resolver, ok := resolvers[botps.Proto]
 	if !ok {
-		return nil, fmt.Errorf("xbinding: 未知的协议类型:%s", proto)
+		return nil, fmt.Errorf("xbinding: 未知的协议类型:%s", botps.Proto)
 	}
 	return resolver.Resolve(botps)
 }

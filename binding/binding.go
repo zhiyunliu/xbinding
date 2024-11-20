@@ -12,26 +12,18 @@ import (
 
 // Content-Type MIME of the most common data formats.
 const (
-	MIMEJSON              = "application/json"
-	MIMEHTML              = "text/html"
-	MIMEXML               = "application/xml"
-	MIMEXML2              = "text/xml"
-	MIMEPlain             = "text/plain"
-	MIMEPOSTForm          = "application/x-www-form-urlencoded"
-	MIMEMultipartPOSTForm = "multipart/form-data"
-	MIMEPROTOBUF          = "application/x-protobuf"
-	MIMEMSGPACK           = "application/x-msgpack"
-	MIMEMSGPACK2          = "application/msgpack"
-	MIMEYAML              = "application/x-yaml"
+	MIMEJSON              = xbinding.MIMEJSON              // "application/json"
+	MIMEHTML              = xbinding.MIMEHTML              // "text/html"
+	MIMEXML               = xbinding.MIMEXML               // "application/xml"
+	MIMEXML2              = xbinding.MIMEXML2              // "text/xml"
+	MIMEPlain             = xbinding.MIMEPlain             // "text/plain"
+	MIMEPOSTForm          = xbinding.MIMEPOSTForm          // "application/x-www-form-urlencoded"
+	MIMEMultipartPOSTForm = xbinding.MIMEMultipartPOSTForm // "multipart/form-data"
+	MIMEPROTOBUF          = xbinding.MIMEPROTOBUF          // "application/x-protobuf"
+	MIMEMSGPACK           = xbinding.MIMEMSGPACK           // "application/x-msgpack"
+	MIMEMSGPACK2          = xbinding.MIMEMSGPACK2          // "application/msgpack"
+	MIMEYAML              = xbinding.MIMEYAML              // "application/x-yaml"
 )
-
-// Binding describes the interface which needs to be implemented for binding the
-// data present in the request such as JSON request body, query parameters or
-// the form POST.
-type Binding interface {
-	Name() string
-	Bind(xbinding.Reader, interface{}) error
-}
 
 // StructValidator is the minimal interface which needs to be implemented in
 // order for it to be used as the validator engine for ensuring the correctness
@@ -92,7 +84,7 @@ func Default(method, contentType string) Binding {
 	case MIMEMultipartPOSTForm:
 		return FormMultipart
 	default: // case MIMEPOSTForm:
-		return Form
+		return nil
 	}
 }
 

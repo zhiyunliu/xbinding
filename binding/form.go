@@ -68,7 +68,7 @@ func (b formMultipartBinding) Bind(reader xbinding.Reader, obj interface{}) erro
 	if err != nil {
 		return err
 	}
-	reqInfo, ok := dataObj.(*MultipartReqestInfo)
+	reqInfo, ok := dataObj.(*xbinding.MultipartReqestInfo)
 	if !ok {
 		return fmt.Errorf("multipart/form-data binding requires *MultipartReqestInfo object")
 	}

@@ -1,18 +1,12 @@
 package binding
 
 import (
-	"fmt"
-
 	"github.com/zhiyunliu/xbinding"
 )
 
 var (
 	bindingMap map[string]Binding
 )
-
-type Marshaler interface {
-	Marshal(v interface{}) ([]byte, error)
-}
 
 type bindingResolver struct {
 	name string
@@ -21,26 +15,12 @@ type bindingResolver struct {
 func (r *bindingResolver) Name() string {
 	return r.name
 }
-func (r *bindingResolver) Resolve(opts *xbinding.Options) (xbinding.Codec, error) {
-	return &bindingCodecWrap{
-		binding: getBinding(opts),
-	}, nil
-}
-
-type bindingCodecWrap struct {
-	binding Binding
-}
-
-func (w *bindingCodecWrap) Marshal(v interface{}) ([]byte, error) {
-	marshaler, ok := w.binding.(Marshaler)
-	if !ok {
-		return nil, fmt.Errorf("not implemented Marshaler,type[%T]", w.binding)
+func (r *bindingResolver) Resolve(opts *xbinding.Options) (codec xbinding.Codec, err error) {
+	codec = getBinding(opts)
+	if codec == nil {
+		return nil, xbinding.ErrUnsupportedContentType
 	}
-	return marshaler.Marshal(v)
-}
-
-func (w *bindingCodecWrap) Unmarshal(reader xbinding.Reader, v interface{}) error {
-	return w.binding.Bind(reader, v)
+	return codec, nil
 }
 
 func init() {
@@ -62,10 +42,9 @@ func init() {
 }
 
 func getBinding(opts *xbinding.Options) Binding {
-	if bindingObj, ok := bindingMap[opts.ContextType]; ok {
+	if bindingObj, ok := bindingMap[opts.ContentType]; ok {
 		return bindingObj
 	}
 
-	bindObj := Default(opts.Method, opts.ContextType)
-	return bindObj
+	return Default(opts.Method, opts.ContentType)
 }

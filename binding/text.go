@@ -14,6 +14,10 @@ func (textCodec) Name() string {
 	return "text"
 }
 
+func (textCodec) ContentType() string {
+	return MIMEPlain
+}
+
 func (textCodec) Marshal(v interface{}) ([]byte, error) {
 	str, _ := v.(string)
 	return bytesconv.StringToBytes(str), nil

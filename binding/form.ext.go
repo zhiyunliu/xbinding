@@ -28,6 +28,10 @@ func (formBinding) Marshal(v interface{}) ([]byte, error) {
 	return bytesconv.StringToBytes(vals.Encode()), nil
 }
 
+func (formBinding) ContentType() string {
+	return MIMEPOSTForm
+}
+
 func (formPostBinding) Marshal(v interface{}) ([]byte, error) {
 	mapVal, err := xreflect.AnyToMap(v)
 	if err != nil {
@@ -39,6 +43,10 @@ func (formPostBinding) Marshal(v interface{}) ([]byte, error) {
 		vals.Set(k, fmt.Sprint(v))
 	}
 	return bytesconv.StringToBytes(vals.Encode()), nil
+}
+
+func (formPostBinding) ContentType() string {
+	return MIMEPOSTForm
 }
 
 func (b formMultipartBinding) Marshal(v interface{}) ([]byte, error) {
@@ -55,4 +63,8 @@ func (b formMultipartBinding) Marshal(v interface{}) ([]byte, error) {
 
 	writer.Close()
 	return byteBuffer.Bytes(), nil
+}
+
+func (formMultipartBinding) ContentType() string {
+	return MIMEMultipartPOSTForm
 }

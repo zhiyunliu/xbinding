@@ -9,3 +9,7 @@ import "encoding/json"
 func (jsonBinding) Marshal(v interface{}) ([]byte, error) {
 	return json.Marshal(v)
 }
+
+func (jsonBinding) ContentType() string {
+	return MIMEJSON
+}

@@ -17,3 +17,6 @@ func (protobufBinding) Marshal(v interface{}) ([]byte, error) {
 	}
 	return proto.Marshal(msg)
 }
+func (protobufBinding) ContentType() string {
+	return MIMEPROTOBUF
+}

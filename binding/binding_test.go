@@ -27,13 +27,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type DefaultReader struct {
-	Data any
-}
-
-func (r *DefaultReader) ReadObject() (any, error) {
-	return r.Data, nil
-}
+type DefaultReader = xbinding.ReaderWrapper
 
 type appkey struct {
 	Appkey string `json:"appkey" form:"appkey"`
@@ -1388,7 +1382,7 @@ func toReader(req *http.Request) xbinding.Reader {
 	if strings.Contains(ctxType, MIMEMultipartPOSTForm) {
 		_, params, _ := mime.ParseMediaType(ctxType)
 
-		reader.Data = &MultipartReqestInfo{
+		reader.Data = &xbinding.MultipartReqestInfo{
 			Boundary: params["boundary"],
 			Body:     req.Body,
 		}

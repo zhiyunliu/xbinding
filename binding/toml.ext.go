@@ -41,3 +41,7 @@ func (tomlBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 
 	return decodeToml(readData, obj)
 }
+
+func (tomlBinding) ContentType() string {
+	return MIMETOML
+}

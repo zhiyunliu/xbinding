@@ -40,7 +40,7 @@ func transferMapArrayData(dataObj any) (sourceData map[string][]string, err erro
 			sourceData[k] = []string{fmt.Sprint(v)}
 		}
 	default:
-		err = fmt.Errorf("binding datatype error[%T]", dataObj)
+		err = fmt.Errorf("transferMapArrayData.binding datatype error[%T]", dataObj)
 	}
 	return
 }
@@ -52,7 +52,7 @@ func transferIoReader(dataObj any) (reader io.Reader, err error) {
 	case []byte:
 		reader = bytes.NewReader(tmp)
 	default:
-		err = fmt.Errorf("binding datatype error[%T]", dataObj)
+		err = fmt.Errorf("transferIoReader.binding datatype error[%T]", dataObj)
 	}
 	return
 }

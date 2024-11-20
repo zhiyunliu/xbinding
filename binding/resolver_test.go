@@ -15,60 +15,48 @@ func Test_getBinding(t *testing.T) {
 		B       string   `json:"b" yaml:"b" xml:"b"`
 	}{A: "A", B: "B"}
 
-	bindingObj := getBinding(xbinding.NewOptions(xbinding.WithContextType("json")))
-	m, ok := bindingObj.(Marshaler)
-	assert.True(t, ok)
+	bindingObj := getBinding(xbinding.NewOptions(xbinding.WithContentType("json")))
 
-	val, err := m.Marshal(testObj)
+	val, err := bindingObj.Marshal(testObj)
 
 	assert.Nil(t, err)
 	assert.Equal(t, `{"a":"A","b":"B"}`, string(val))
 	//----------------------
-	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContextType("text")))
-	m, ok = bindingObj.(Marshaler)
-	assert.True(t, ok)
+	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContentType("text")))
 
-	val, err = m.Marshal("B")
+	val, err = bindingObj.Marshal("B")
 
 	assert.Nil(t, err)
 	assert.Equal(t, `B`, string(val))
 
 	//----------------------
-	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContextType("form")))
-	m, ok = bindingObj.(Marshaler)
-	assert.True(t, ok)
+	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContentType("form")))
 
-	val, err = m.Marshal(testObj)
+	val, err = bindingObj.Marshal(testObj)
 
 	assert.Nil(t, err)
 	assert.Equal(t, `a=A&b=B`, string(val))
 
 	//----------------------
-	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContextType("form-urlencoded")))
-	m, ok = bindingObj.(Marshaler)
-	assert.True(t, ok)
+	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContentType("form-urlencoded")))
 
-	val, err = m.Marshal(testObj)
+	val, err = bindingObj.Marshal(testObj)
 
 	assert.Nil(t, err)
 	assert.Equal(t, `a=A&b=B`, string(val))
 
 	//----------------------
-	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContextType("xml")))
-	m, ok = bindingObj.(Marshaler)
-	assert.True(t, ok)
+	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContentType("xml")))
 
-	val, err = m.Marshal(testObj)
+	val, err = bindingObj.Marshal(testObj)
 
 	assert.Nil(t, err)
 	assert.Equal(t, `<cxml><a>A</a><b>B</b></cxml>`, string(val))
 
 	//----------------------
-	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContextType("yaml")))
-	m, ok = bindingObj.(Marshaler)
-	assert.True(t, ok)
+	bindingObj = getBinding(xbinding.NewOptions(xbinding.WithContentType("yaml")))
 
-	val, err = m.Marshal(testObj)
+	val, err = bindingObj.Marshal(testObj)
 
 	assert.Nil(t, err)
 	assert.Equal(t, "a: A\nb: B\n", string(val))

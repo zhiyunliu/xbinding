@@ -4,7 +4,14 @@
 
 package binding
 
-import "github.com/zhiyunliu/xbinding"
+import (
+	"fmt"
+	"net/url"
+
+	"github.com/zhiyunliu/golibs/bytesconv"
+	"github.com/zhiyunliu/golibs/xreflect"
+	"github.com/zhiyunliu/xbinding"
+)
 
 type uriBinding struct{}
 
@@ -27,4 +34,21 @@ func (uriBinding) Bind(reader xbinding.Reader, obj interface{}) error {
 		return err
 	}
 	return validate(obj)
+}
+
+func (uriBinding) ContentType() string {
+	return MIMEPOSTForm
+}
+
+func (uriBinding) Marshal(v interface{}) ([]byte, error) {
+	mapVal, err := xreflect.AnyToMap(v, xreflect.WithMaxDepth(1))
+	if err != nil {
+		return nil, err
+	}
+	vals := url.Values{}
+
+	for k, v := range mapVal {
+		vals.Add(k, fmt.Sprint(v))
+	}
+	return bytesconv.StringToBytes(vals.Encode()), nil
 }

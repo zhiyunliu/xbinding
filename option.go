@@ -5,7 +5,7 @@ type Option func(o *Options)
 type Options struct {
 	Proto       string
 	Method      string
-	ContextType string
+	ContentType string
 }
 
 func NewOptions(opts ...Option) *Options {
@@ -16,9 +16,9 @@ func NewOptions(opts ...Option) *Options {
 	return o
 }
 
-func WithContextType(contextType string) Option {
+func WithContentType(contentType string) Option {
 	return func(o *Options) {
-		o.ContextType = contextType
+		o.ContentType = contentType
 	}
 }
 
