@@ -1,6 +1,6 @@
 module github.com/zhiyunliu/xbinding
 
-go 1.22.1
+go 1.21.0
 
 require github.com/zhiyunliu/golibs v0.2.9
 
