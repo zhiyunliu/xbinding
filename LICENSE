@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024 zhiyun
+Copyright (c) [2025] [zhiyunliu]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,74 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+-------------------------------------------------------------------------------
+
+This software includes the following third-party components:
+
+1. github.com/go-playground/validator/v10 (MIT License)
+   - Copyright (c) 2016-2023 Dean Karn
+   - https://github.com/go-playground/validator/blob/master/LICENSE
+
+2. github.com/pelletier/go-toml/v2 (MIT License)
+   - Copyright (c) 2021 Thomas Pelletier
+   - https://github.com/pelletier/go-toml/blob/master/LICENSE
+
+3. github.com/stretchr/testify (MIT License)
+   - Copyright (c) 2012-2020 Mat Ryer, Tyler Bunnell and contributors
+   - https://github.com/stretchr/testify/blob/master/LICENSE
+
+4. google.golang.org/protobuf (BSD 3-Clause License)
+   - Copyright (c) The Go Authors
+   - https://github.com/protocolbuffers/protobuf-go/blob/main/LICENSE
+
+5. gopkg.in/yaml.v3 (MIT License)
+   - Copyright (c) 2006 Kirill Simonov
+   - https://github.com/go-yaml/yaml/blob/v3/LICENSE
+
+6. github.com/davecgh/go-spew (ISC License)
+   - Copyright (c) 2012-2016 Dave Collins
+   - https://github.com/davecgh/go-spew/blob/master/LICENSE
+
+7. github.com/gabriel-vasile/mimetype (MIT License)
+   - Copyright (c) 2017 Gabriel Vasile
+   - https://github.com/gabriel-vasile/mimetype/blob/master/LICENSE
+
+8. github.com/go-playground/locales (MIT License)
+   - Copyright (c) 2016 Go Playground
+   - https://github.com/go-playground/locales/blob/master/LICENSE
+
+9. github.com/go-playground/universal-translator (MIT License)
+   - Copyright (c) 2016 Go Playground
+   - https://github.com/go-playground/universal-translator/blob/master/LICENSE
+
+10. github.com/leodido/go-urn (MIT License)
+    - Copyright (c) 2014-2023 Leodido
+    - https://github.com/leodido/go-urn/blob/main/LICENSE
+
+11. github.com/pmezard/go-difflib (BSD 3-Clause License)
+    - Copyright (c) 2013, Patrick Mezard
+    - https://github.com/pmezard/go-difflib/blob/master/LICENSE
+
+12. github.com/shopspring/decimal (MIT License)
+    - Copyright (c) 2014 Spring
+    - https://github.com/shopspring/decimal/blob/master/LICENSE
+
+13. golang.org/x/crypto (BSD 3-Clause License)
+    - Copyright (c) The Go Authors
+    - https://cs.opensource.google/go/x/crypto/+/master:LICENSE
+
+14. golang.org/x/net (BSD 3-Clause License)
+    - Copyright (c) The Go Authors
+    - https://cs.opensource.google/go/x/net/+/master:LICENSE
+
+15. golang.org/x/sys (BSD 3-Clause License)
+    - Copyright (c) The Go Authors
+    - https://cs.opensource.google/go/x/sys/+/master:LICENSE
+
+16. golang.org/x/text (BSD 3-Clause License)
+    - Copyright (c) The Go Authors
+    - https://cs.opensource.google/go/x/text/+/master:LICENSE
+17. github.com/gin-gonic/gin (MIT License)
+    - Copyright (c) 2014 Manuel Martínez-Almeida
+    - https://github.com/gin-gonic/gin/blob/master/LICENSE
