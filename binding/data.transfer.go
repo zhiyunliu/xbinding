@@ -39,6 +39,17 @@ func transferMapArrayData(dataObj any) (sourceData map[string][]string, err erro
 		for k, v := range tmp {
 			sourceData[k] = []string{fmt.Sprint(v)}
 		}
+	case io.Reader:
+		var bodyBytes []byte
+		bodyBytes, err = io.ReadAll(tmp)
+		if err != nil {
+			return
+		}
+		sourceData, err = url.ParseQuery(string(bodyBytes))
+
+	case []byte:
+		sourceData, err = url.ParseQuery(string(tmp))
+
 	default:
 		err = fmt.Errorf("transferMapArrayData.binding datatype error[%T]", dataObj)
 	}
