@@ -58,10 +58,10 @@ func (b formMultipartBinding) Marshal(v interface{}) ([]byte, error) {
 	byteBuffer := &bytes.Buffer{}
 	writer := multipart.NewWriter(byteBuffer)
 	for k, v := range mapVal {
-		writer.WriteField(k, fmt.Sprint(v))
+		_ = writer.WriteField(k, fmt.Sprint(v))
 	}
 
-	writer.Close()
+	_ = writer.Close()
 	return byteBuffer.Bytes(), nil
 }
 
